@@ -39,19 +39,22 @@ namespace Indiv2.models.figures
             }
         }
 
-        public float[,] Matrix
+        public List<Matrix3D> Matrices
         {
             get
             {
-                var res = new float[points.Count, 4];
+                List<Matrix3D> matrices = new List<Matrix3D>();
                 for (int i = 0; i < points.Count; i++)
                 {
-                    res[i, 0] = (float)points[i].X;
-                    res[i, 1] = (float)points[i].Y;
-                    res[i, 2] = (float)points[i].Z;
-                    res[i, 3] = 1;
+                    var point = new Matrix3D(
+                        (float)points[i].X, (float)points[i].Y, (float)points[i].Z, 1,
+                        1,1,1,1,
+                        1,1,1,1,
+                        1,1,1,1);
+
+                    matrices.Add(point);
                 }
-                return res;
+                return matrices;
             }
         }
 
