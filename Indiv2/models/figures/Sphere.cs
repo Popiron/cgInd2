@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Windows.Media.Media3D;
 
 namespace Indiv2.models.figures
 {
@@ -11,18 +12,18 @@ namespace Indiv2.models.figures
 
         public Pen drawing_pen = new Pen(Color.Black);
 
-        public Sphere(Point3D p, float r)
+        public Sphere(Vector3D p, float r)
         {
             points.Add(p);
             radius = r;
         }
 
 
-        public static bool ray_sphere_intersection(Ray r, Point3D sphere_pos, float sphere_rad, out float t)
+        public static bool ray_sphere_intersection(Ray r, Vector3D sphere_pos, float sphere_rad, out float t)
         {
-            Point3D k = r.start - sphere_pos;
-            float b = Point3D.scalar(k, r.direction);
-            float c = Point3D.scalar(k, k) - sphere_rad * sphere_rad;
+            Vector3D k = r.start - sphere_pos;
+            float b = (float)Vector3D.DotProduct(k, r.direction);
+            float c = (float) Vector3D.DotProduct(k, k) - sphere_rad * sphere_rad;
             float d = b * b - c;
             t = 0;
 
@@ -47,16 +48,16 @@ namespace Indiv2.models.figures
 
         }
 
-        public override bool figure_intersection(Ray r, out float t, out Point3D normal)
+        public override bool figure_intersection(Ray r, out float t, out Vector3D normal)
         {
             t = 0;
-            normal = null;
+            normal = new Vector3D();
 
             if (ray_sphere_intersection(r, points[0], radius, out t) && (t > EPS))
             {
                 normal = (r.start + r.direction * t) - points[0];
-                normal = Point3D.norm(normal);
-                figure_material.clr = new Point3D(drawing_pen.Color.R / 255f, drawing_pen.Color.G / 255f, drawing_pen.Color.B / 255f);
+                normal.Normalize();
+                figure_material.clr = new Vector3D(drawing_pen.Color.R / 255f, drawing_pen.Color.G / 255f, drawing_pen.Color.B / 255f);
                 return true;
             }
             return false;

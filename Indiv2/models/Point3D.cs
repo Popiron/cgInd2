@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Indiv2.models
 {
-    public class Point3D
+    /*public class Point3D
     {
         public float x, y, z;
 
@@ -110,5 +110,5 @@ namespace Indiv2.models
         {
             return new Point3D(t / p1.x, t / p1.y, t / p1.z);
         }
-    }
+    }*/
 }

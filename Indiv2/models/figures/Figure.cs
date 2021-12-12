@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Windows.Media.Media3D;
 
 namespace Indiv2.models.figures
 {
@@ -10,7 +11,7 @@ namespace Indiv2.models.figures
     {
 
         public static float EPS = 0.0001f;
-        public List<Point3D> points = new List<Point3D>(); // точки 
+        public List<Vector3D> points = new List<Vector3D>(); // точки 
         public List<Side> sides = new List<Side>();        // стороны
         public Material figure_material;
         public bool isRoom = false;                       // данный куб - комната?
@@ -25,8 +26,8 @@ namespace Indiv2.models.figures
 
         public Figure(Figure f)
         {
-            foreach (Point3D p in f.points)
-                points.Add(new Point3D(p));
+            foreach (var p in f.points)
+                points.Add(new Vector3D(p.X,p.Y,p.Z));
 
             foreach (Side s in f.sides)
             {
@@ -35,32 +36,32 @@ namespace Indiv2.models.figures
             }
         }
 
-        public bool ray_intersects_triangle(Ray r, Point3D p0, Point3D p1, Point3D p2, out float intersect)
+        public bool ray_intersects_triangle(Ray r, Vector3D p0, Vector3D p1, Vector3D p2, out float intersect)
         {
             intersect = -1;
 
-            Point3D edge1 = p1 - p0;
-            Point3D edge2 = p2 - p0;
-            Point3D h = r.direction * edge2;
-            float a = Point3D.scalar(edge1, h);
+            Vector3D edge1 = p1 - p0;
+            Vector3D edge2 = p2 - p0;
+            Vector3D h = Vector3D.CrossProduct(r.direction,edge2);
+            float a = (float)Vector3D.DotProduct(edge1, h);
 
             if (a > -EPS && a < EPS)
                 return false;       // This ray is parallel to this triangle.
 
             float f = 1.0f / a;
-            Point3D s = r.start - p0;
-            float u = f * Point3D.scalar(s, h);
+            Vector3D s = r.start - p0;
+            float u = f * (float)Vector3D.DotProduct(s, h);
 
             if (u < 0 || u > 1)
                 return false;
 
-            Point3D q = s * edge1;
-            float v = f * Point3D.scalar(r.direction, q);
+            Vector3D q = Vector3D.CrossProduct(s,edge1);
+            float v = f * (float)Vector3D.DotProduct(r.direction, q);
 
             if (v < 0 || u + v > 1)
                 return false;
             // At this stage we can compute t to find out where the intersection point is on the line.
-            float t = f * Point3D.scalar(edge2, q);
+            float t = f * (float)Vector3D.DotProduct(edge2, q);
             if (t > EPS)
             {
                 intersect = t;
@@ -71,10 +72,10 @@ namespace Indiv2.models.figures
         }
 
         // пересечение луча с фигурой
-        public virtual bool figure_intersection(Ray r, out float intersect, out Point3D normal)
+        public virtual bool figure_intersection(Ray r, out float intersect, out Vector3D normal)
         {
             intersect = 0;
-            normal = null;
+            normal = new Vector3D();
             Side sd = null;
             int fm = -1;         // номер стены комнаты, которую пересек луч
 
@@ -133,7 +134,7 @@ namespace Indiv2.models.figures
                         default:
                             break;
                     }
-                figure_material.clr = new Point3D(sd.drawing_pen.Color.R / 255f, sd.drawing_pen.Color.G / 255f, sd.drawing_pen.Color.B / 255f);
+                figure_material.clr = new Vector3D(sd.drawing_pen.Color.R / 255f, sd.drawing_pen.Color.G / 255f, sd.drawing_pen.Color.B / 255f);
                 return true;
             }
 
@@ -150,9 +151,9 @@ namespace Indiv2.models.figures
             var res = new float[points.Count, 4];
             for (int i = 0; i < points.Count; i++)
             {
-                res[i, 0] = points[i].x;
-                res[i, 1] = points[i].y;
-                res[i, 2] = points[i].z;
+                res[i, 0] = (float)points[i].X;
+                res[i, 1] = (float)points[i].Y;
+                res[i, 2] = (float)points[i].Z;
                 res[i, 3] = 1;
             }
             return res;
@@ -162,10 +163,7 @@ namespace Indiv2.models.figures
         {
             for (int i = 0; i < points.Count; i++)
             {
-                points[i].x = matrix[i, 0] / matrix[i, 3];
-                points[i].y = matrix[i, 1] / matrix[i, 3];
-                points[i].z = matrix[i, 2] / matrix[i, 3];
-
+                points[i] = new Vector3D((double)matrix[i, 0] / (double)matrix[i, 3], (double)matrix[i, 1] / (double)matrix[i, 3], (double)matrix[i, 2] / (double)matrix[i, 3]);
             }
         }
 
@@ -174,14 +172,14 @@ namespace Indiv2.models.figures
             Point3D res = new Point3D(0, 0, 0);
             foreach (Point3D p in points)
             {
-                res.x += p.x;
-                res.y += p.y;
-                res.z += p.z;
+                res.X += p.X;
+                res.Y += p.Y;
+                res.Z += p.Z;
 
             }
-            res.x /= points.Count();
-            res.y /= points.Count();
-            res.z /= points.Count();
+            res.X /= points.Count();
+            res.Y /= points.Count();
+            res.Z /= points.Count();
             return res;
         }
 
@@ -196,19 +194,19 @@ namespace Indiv2.models.figures
             switch (type)
             {
                 case "CX":
-                    mt = apply_offset(mt, -center.x, -center.y, -center.z);
+                    mt = apply_offset(mt, (float)-center.X, (float)-center.Y, (float)-center.Z);
                     mt = apply_rotation_X(mt, rangle);
-                    mt = apply_offset(mt, center.x, center.y, center.z);
+                    mt = apply_offset(mt, (float)center.X, (float)center.Y, (float)center.Z);
                     break;
                 case "CY":
-                    mt = apply_offset(mt, -center.x, -center.y, -center.z);
+                    mt = apply_offset(mt, (float)-center.X, (float)-center.Y, (float)-center.Z);
                     mt = apply_rotation_Y(mt, rangle);
-                    mt = apply_offset(mt, center.x, center.y, center.z);
+                    mt = apply_offset(mt, (float)center.X, (float)center.Y, (float)center.Z);
                     break;
                 case "CZ":
-                    mt = apply_offset(mt, -center.x, -center.y, -center.z);
+                    mt = apply_offset(mt, (float)-center.X, (float)-center.Y, (float)-center.Z);
                     mt = apply_rotation_Z(mt, rangle);
-                    mt = apply_offset(mt, center.x, center.y, center.z);
+                    mt = apply_offset(mt, (float)center.X, (float)center.Y, (float)center.Z);
                     break;
                 case "X":
                     mt = apply_rotation_X(mt, rangle);
@@ -253,17 +251,17 @@ namespace Indiv2.models.figures
         {
             float[,] pnts = get_matrix();
             Point3D p = get_center();
-            pnts = apply_offset(pnts, -p.x, -p.y, -p.z);
+            pnts = apply_offset(pnts, (float)-p.X, (float)-p.Y, (float)-p.Z);
             pnts = apply_scale(pnts, xs, ys, zs);
-            pnts = apply_offset(pnts, p.x, p.y, p.z);
+            pnts = apply_offset(pnts, (float)p.X, (float)p.Y, (float)p.Z);
             apply_matrix(pnts);
         }
 
-        public void line_rotate_rad(float rang, Point3D p1, Point3D p2)
+        public void line_rotate_rad(float rang, Vector3D p1, Vector3D p2)
         {
 
-            p2 = new Point3D(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
-            p2 = Point3D.norm(p2);
+            p2 = p2-p1;
+            p2.Normalize();
 
             float[,] mt = get_matrix();
             apply_matrix(rotate_around_line(mt, p1, p2, rang));
@@ -275,7 +273,7 @@ namespace Indiv2.models.figures
         /// <param name="ang">angle in degrees</param>
         /// <param name="p1">line start</param>
         /// <param name="p2">line end</param>
-        public void line_rotate(float ang, Point3D p1, Point3D p2)
+        public void line_rotate(float ang, Vector3D p1, Vector3D p2)
         {
             ang = ang * (float)Math.PI / 180;
             line_rotate_rad(ang, p1, p2);
@@ -286,21 +284,21 @@ namespace Indiv2.models.figures
         /// ----------------------------- STATIC BACKEND FOR TRANSFROMS --------------------------------
         ///
 
-        private static float[,] rotate_around_line(float[,] transform_matrix, Point3D start, Point3D dir, float angle)
+        private static float[,] rotate_around_line(float[,] transform_matrix, Vector3D start, Vector3D dir, float angle)
         {
             float cos_angle = (float)Math.Cos(angle);
             float sin_angle = (float)Math.Sin(angle);
-            float val00 = dir.x * dir.x + cos_angle * (1 - dir.x * dir.x);
-            float val01 = dir.x * (1 - cos_angle) * dir.y + dir.z * sin_angle;
-            float val02 = dir.x * (1 - cos_angle) * dir.z - dir.y * sin_angle;
-            float val10 = dir.x * (1 - cos_angle) * dir.y - dir.z * sin_angle;
-            float val11 = dir.y * dir.y + cos_angle * (1 - dir.y * dir.y);
-            float val12 = dir.y * (1 - cos_angle) * dir.z + dir.x * sin_angle;
-            float val20 = dir.x * (1 - cos_angle) * dir.z + dir.y * sin_angle;
-            float val21 = dir.y * (1 - cos_angle) * dir.z - dir.x * sin_angle;
-            float val22 = dir.z * dir.z + cos_angle * (1 - dir.z * dir.z);
+            float val00 = (float)(dir.X * dir.X + cos_angle * (1 - dir.X * dir.X));
+            float val01 = (float)(dir.X * (1 - cos_angle) * dir.Y + dir.Z * sin_angle);
+            float val02 = (float)(dir.X * (1 - cos_angle) * dir.Z - dir.Y * sin_angle);
+            float val10 = (float)(dir.X * (1 - cos_angle) * dir.Y - dir.Z * sin_angle);
+            float val11 = (float)(dir.Y * dir.Y + cos_angle * (1 - dir.Y * dir.Y));
+            float val12 = (float)(dir.Y * (1 - cos_angle) * dir.Z + dir.X * sin_angle);
+            float val20 = (float)(dir.X * (1 - cos_angle) * dir.Z + dir.Y * sin_angle);
+            float val21 = (float)(dir.Y * (1 - cos_angle) * dir.Z - dir.X * sin_angle);
+            float val22 = (float)(dir.Z * dir.Z + cos_angle * (1 - dir.Z * dir.Z));
             float[,] rotateMatrix = new float[,] { { val00, val01, val02, 0 }, { val10, val11, val12, 0 }, { val20, val21, val22, 0 }, { 0, 0, 0, 1 } };
-            return apply_offset(multiply_matrix(apply_offset(transform_matrix, -start.x, -start.y, -start.z), rotateMatrix), start.x, start.y, start.z);
+            return apply_offset(multiply_matrix(apply_offset(transform_matrix, (float)-start.X, (float)-start.Y, (float)-start.Z), rotateMatrix), (float)start.X, (float)start.Y, (float)start.Z);
         }
 
         private static float[,] multiply_matrix(float[,] m1, float[,] m2)
@@ -360,15 +358,15 @@ namespace Indiv2.models.figures
         static public Figure get_Hexahedron(float sz)
         {
             Figure res = new Figure();
-            res.points.Add(new Point3D(sz / 2, sz / 2, sz / 2)); // 0 
-            res.points.Add(new Point3D(-sz / 2, sz / 2, sz / 2)); // 1
-            res.points.Add(new Point3D(-sz / 2, sz / 2, -sz / 2)); // 2
-            res.points.Add(new Point3D(sz / 2, sz / 2, -sz / 2)); //3
+            res.points.Add(new Vector3D(sz / 2, sz / 2, sz / 2)); // 0 
+            res.points.Add(new Vector3D(-sz / 2, sz / 2, sz / 2)); // 1
+            res.points.Add(new Vector3D(-sz / 2, sz / 2, -sz / 2)); // 2
+            res.points.Add(new Vector3D(sz / 2, sz / 2, -sz / 2)); //3
 
-            res.points.Add(new Point3D(sz / 2, -sz / 2, sz / 2)); // 4
-            res.points.Add(new Point3D(-sz / 2, -sz / 2, sz / 2)); //5
-            res.points.Add(new Point3D(-sz / 2, -sz / 2, -sz / 2)); // 6
-            res.points.Add(new Point3D(sz / 2, -sz / 2, -sz / 2)); // 7
+            res.points.Add(new Vector3D(sz / 2, -sz / 2, sz / 2)); // 4
+            res.points.Add(new Vector3D(-sz / 2, -sz / 2, sz / 2)); //5
+            res.points.Add(new Vector3D(-sz / 2, -sz / 2, -sz / 2)); // 6
+            res.points.Add(new Vector3D(sz / 2, -sz / 2, -sz / 2)); // 7
 
             Side s = new Side(res);
             s.points.AddRange(new int[] { 3, 2, 1, 0 });

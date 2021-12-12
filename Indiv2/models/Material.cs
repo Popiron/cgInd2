@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Media.Media3D;
 
 namespace Indiv2.models
 {
@@ -11,7 +12,7 @@ namespace Indiv2.models
         public float environment;   // коэффициент преломления среды
         public float ambient;       // коэффициент принятия фонового освещения
         public float diffuse;       // коэффициент принятия диффузного освещения
-        public Point3D clr;         // цвет материала
+        public Vector3D clr;         // цвет материала
 
         public Material(float refl, float refr, float amb, float dif, float env = 1)
         {
@@ -29,7 +30,7 @@ namespace Indiv2.models
             environment = m.environment;
             ambient = m.ambient;
             diffuse = m.diffuse;
-            clr = new Point3D(m.clr);
+            clr = new Vector3D(m.clr.X,m.clr.Y,m.clr.Z);
         }
 
         public Material() { }

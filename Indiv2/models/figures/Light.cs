@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Media.Media3D;
 
 namespace Indiv2.models.figures
 {
     public class Light : Figure
     {
-        public Point3D point_light;       // точка, где находится источник света
-        public Point3D color_light;       // цвет источника света
+        public Vector3D point_light;       // точка, где находится источник света
+        public Vector3D color_light;       // цвет источника света
 
-        public Light(Point3D p, Point3D c)
+        public Light(Vector3D p, Vector3D c)
         {
-            point_light = new Point3D(p);
-            color_light = new Point3D(c);
+            point_light = new Vector3D(p.X,p.Y,p.Z);
+            color_light = new Vector3D(c.X,c.Y,c.Z);
         }
 
         // вычисление локальной модели освещения
-        public Point3D shade(Point3D hit_point, Point3D normal, Point3D color_obj, float diffuse_coef)
+        public Vector3D shade(Vector3D hit_point, Vector3D normal, Vector3D color_obj, float diffuse_coef)
         {
-            Point3D dir = point_light - hit_point;
-            dir = Point3D.norm(dir);                // направление луча из источника света в точку удара
+            Vector3D dir = point_light - hit_point;
+            dir.Normalize();               // направление луча из источника света в точку удара
 
-            Point3D diff = diffuse_coef * color_light * Math.Max(Point3D.scalar(normal, dir), 0);
-            return new Point3D(diff.x * color_obj.x, diff.y * color_obj.y, diff.z * color_obj.z);
+            Vector3D diff = diffuse_coef * color_light * Math.Max(Vector3D.DotProduct(normal, dir), 0);
+            return new Vector3D(diff.X * color_obj.X, diff.Y * color_obj.Y, diff.Z * color_obj.Z);
         }
     }
 }
