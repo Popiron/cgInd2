@@ -1,4 +1,5 @@
-﻿using Indiv2.models;
+﻿using Indiv2.logi;
+using Indiv2.models;
 using Indiv2.models.figures;
 using System;
 using System.Collections.Generic;
@@ -57,7 +58,7 @@ namespace Indiv2
             Vector3D center = (up_left + up_right + down_left + down_right) / 4;   // центр стороны комнаты
             focus = center + normal * 10;
 
-            room.set_pen(new Pen(Color.Gray));
+            room.Pen = new Pen(Color.Gray);
 
             room.isRoom = true;
 
@@ -136,7 +137,7 @@ namespace Indiv2
             }
 
             Sphere s1 = new Sphere(new Vector3D(2.8f, -2.5f, 2.5f), 2f);
-            s1.set_pen(new Pen(Color.White));
+            s1.Pen = new Pen(Color.White);
             if (sphereSpecularCB.Checked)
             {
                 refl = 0.9f; refr = 0f; amb = 0f; dif = 0.1f; env = 1f;
@@ -148,9 +149,9 @@ namespace Indiv2
             s1.figure_material = new Material(refl, refr, amb, dif, env);
 
             Figure cube1 = Figure.get_Hexahedron(3.2f);
-            cube1.offset(-0.5f, -1, -3.5f);
-            cube1.rotate_around(55, "CZ");
-            cube1.set_pen(new Pen(Color.Aqua));
+            AphineTransforms.offset(cube1, -0.5f, -1, -3.5f);
+            AphineTransforms.rotate_around(cube1, 55, "CZ");
+            cube1.Pen = new Pen(Color.Aqua);
             if (refractCubeCB.Checked)
             {
                 refl = 0.0f; refr = 0.8f; amb = 0f; dif = 0.0f; env = 1.03f;
@@ -162,9 +163,9 @@ namespace Indiv2
             cube1.figure_material = new Material(refl, refr, amb, dif, env);
 
             Figure cube2 = Figure.get_Hexahedron(2.6f);
-            cube2.offset(-2.4f, 2, -3.8f);
-            cube2.rotate_around(30, "CZ");
-            cube2.set_pen(new Pen(Color.Blue));
+            AphineTransforms.offset(cube2, -2.4f, 2, -3.8f);
+            AphineTransforms.rotate_around(cube2, 30, "CZ");
+            cube2.Pen = new Pen(Color.Blue);
             if (cubeSpecularCB.Checked)
             {
                 refl = 0.8f; refr = 0f; amb = 0.05f; dif = 0.0f; env = 1f;
@@ -176,11 +177,11 @@ namespace Indiv2
             cube2.figure_material = new Material(refl, refr, amb, dif, env);
 
             Sphere s2 = new Sphere(new Vector3D(-2.2f, 1.6f, -1.4f), 1.2f);
-            s2.set_pen(new Pen(Color.DarkOrange));
+            s2.Pen = new Pen(Color.DarkOrange);
             s2.figure_material = new Material(0.0f, 0.0f, 0.1f, 0.7f, 1.0f);
 
             Sphere s3 = new Sphere(new Vector3D(2.5f, 2f, -3.4f), 1.7f);
-            s3.set_pen(new Pen(Color.LimeGreen));
+            s3.Pen = new Pen(Color.LimeGreen);
             if (refractSphereCB.Checked)
             {
                 refl = 0.0f; refr = 0.9f; amb = 0f; dif = 0.0f; env = 1.03f;
@@ -192,7 +193,7 @@ namespace Indiv2
             s3.figure_material = new Material(refl, refr, amb, dif, env);
 
             Sphere s4 = new Sphere(new Vector3D(2.7f, -2.5f, 3.95f), 1.3f);
-            s4.set_pen(new Pen(Color.Red));
+            s4.Pen = new Pen(Color.Red);
             s4.figure_material = new Material(0.7f, 0f, 0.0f, 0.0f, 1f);
 
             scene.Add(room);

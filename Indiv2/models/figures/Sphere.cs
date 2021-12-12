@@ -42,12 +42,6 @@ namespace Indiv2.models.figures
             return false;
         }
 
-        public override void set_pen(Pen dw)
-        {
-            drawing_pen = dw;
-
-        }
-
         public override bool figure_intersection(Ray r, out float t, out Vector3D normal)
         {
             t = 0;

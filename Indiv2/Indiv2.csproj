@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="helpers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="PresentationCore">
       <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\3.1.19\PresentationCore.dll</HintPath>
     </Reference>
