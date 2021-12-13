@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Media3D;
-using Light = Indiv2.models.figures.Light;
+using LightBox = Indiv2.models.figures.LightBox;
 using Material = Indiv2.models.Material;
 
 namespace Indiv2
@@ -20,7 +20,7 @@ namespace Indiv2
     {
 
         public List<Figure> scene = new List<Figure>();
-        public List<Light> lights = new List<Light>();   // список источников света
+        public List<LightBox> lights = new List<LightBox>();   // список источников света
         public Color[,] color_pixels;                    // цвета пикселей для отображения на pictureBox
         public Vector3D[,] pixels;
         public Vector3D focus;
@@ -39,7 +39,7 @@ namespace Indiv2
             w = pictureBox1.Width;
             pictureBox1.Image = new Bitmap(w, h);
             cubeSpecularCB.Checked = true;
-            sphereSpecularCB.Checked = true;
+            sphereSpecularCB.Checked = false;
             refractCubeCB.Checked = false;
             refractSphereCB.Checked = true;
             frontWallSpecularCB.Checked = backWallSpecularCB.Checked = leftWallSpecularCB.Checked = rightWallSpecularCB.Checked = false;
@@ -48,23 +48,21 @@ namespace Indiv2
 
         public void build_scene()
         {
-            Figure room = Figure.get_Hexahedron(10);
+            Room room = new Room(ReadyFigures.Hexahedron(10));
             up_left = room.sides[0].get_point(0);
             up_right = room.sides[0].get_point(1);
             down_right = room.sides[0].get_point(2);
             down_left = room.sides[0].get_point(3);
 
-            Vector3D normal = Side.norm(room.sides[0]);                            // нормаль стороны комнаты
+            Vector3D normal = room.sides[0].Normal;                            // нормаль стороны комнаты
             Vector3D center = (up_left + up_right + down_left + down_right) / 4;   // центр стороны комнаты
             focus = center + normal * 10;
 
             room.Pen = new Pen(Color.Gray);
 
-            room.isRoom = true;
-
             float refl, refr, amb, dif, env;
 
-            room.sides[0].drawing_pen = new Pen(Color.Green);
+            room.sides[0].drawing_pen = new Pen(Color.White);
             if (backWallSpecularCB.Checked)
             {
                 refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
@@ -75,7 +73,7 @@ namespace Indiv2
             }
             room.back_wall_material = new Material(refl, refr, amb, dif, env);
 
-            room.sides[1].drawing_pen = new Pen(Color.Gold);
+            room.sides[1].drawing_pen = new Pen(Color.White);
             if (frontWallSpecularCB.Checked)
             {
                 refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
@@ -86,7 +84,7 @@ namespace Indiv2
             }
             room.front_wall_material = new Material(refl, refr, amb, dif, env);
 
-            room.sides[2].drawing_pen = new Pen(Color.DeepPink);
+            room.sides[2].drawing_pen = new Pen(Color.Blue);
             if (rightWallSpecularCB.Checked)
             {
                 refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
@@ -97,7 +95,7 @@ namespace Indiv2
             }
             room.right_wall_material = new Material(refl, refr, amb, dif, env);
 
-            room.sides[3].drawing_pen = new Pen(Color.BlueViolet);
+            room.sides[3].drawing_pen = new Pen(Color.Red);
             if (leftWallSpecularCB.Checked)
             {
                 refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
@@ -128,19 +126,23 @@ namespace Indiv2
             }
             room.down_wall_material = new Material(refl, refr, amb, dif, env);
 
-            Light l1 = new Light(new Vector3D(0f, 1f, 4.9f), new Vector3D(1f, 1f, 1f));
+            LightBox l1 = new LightBox(new Vector3D(0f, 1f, 4.9f), new Vector3D(1f, 1f, 1f));
             lights.Add(l1);
             if (twoLightsCB.Checked)
             {
-                Light l2 = new Light(new Vector3D(0f, 4f, -4.9f), new Vector3D(1f, 1f, 1f));
+                LightBox l2 = new LightBox(new Vector3D(0f, 4f, -4.9f), new Vector3D(1f, 1f, 1f));
                 lights.Add(l2);
             }
 
-            Sphere s1 = new Sphere(new Vector3D(2.8f, -2.5f, 2.5f), 2f);
-            s1.Pen = new Pen(Color.White);
+            Sphere s1 = new Sphere(new Vector3D(0.7f, 3.5f, -4.0f), 1f);
+            s1.drawing_pen = new Pen(Color.White);
             if (sphereSpecularCB.Checked)
             {
                 refl = 0.9f; refr = 0f; amb = 0f; dif = 0.1f; env = 1f;
+            }
+            else if (refractSphereCB.Checked)
+            {
+                refl = 0.0f; refr = 0.9f; amb = 0f; dif = 0.0f; env = 1.03f;
             }
             else
             {
@@ -148,13 +150,16 @@ namespace Indiv2
             }
             s1.figure_material = new Material(refl, refr, amb, dif, env);
 
-            Figure cube1 = Figure.get_Hexahedron(3.2f);
-            AphineTransforms.offset(cube1, -0.5f, -1, -3.5f);
-            AphineTransforms.rotate_around(cube1, 55, "CZ");
-            cube1.Pen = new Pen(Color.Aqua);
+            Figure cube1 = ReadyFigures.Hexahedron(3.0f);
+            AphineTransforms.offset(cube1, 2.5f, 0.0f, -3.3f);
+            cube1.Pen = new Pen(Color.Yellow);
             if (refractCubeCB.Checked)
             {
                 refl = 0.0f; refr = 0.8f; amb = 0f; dif = 0.0f; env = 1.03f;
+            }
+            if (cubeSpecularCB.Checked)
+            {
+                refl = 0.8f; refr = 0f; amb = 0.05f; dif = 0.0f; env = 1f;
             }
             else
             {
@@ -162,11 +167,15 @@ namespace Indiv2
             }
             cube1.figure_material = new Material(refl, refr, amb, dif, env);
 
-            Figure cube2 = Figure.get_Hexahedron(2.6f);
-            AphineTransforms.offset(cube2, -2.4f, 2, -3.8f);
+            Figure cube2 = ReadyFigures.Hexahedron(5.0f);
+            AphineTransforms.offset(cube2, -2.0f, -1.5f, -2.5f);
             AphineTransforms.rotate_around(cube2, 30, "CZ");
-            cube2.Pen = new Pen(Color.Blue);
-            if (cubeSpecularCB.Checked)
+            cube2.Pen = new Pen(Color.White);
+            if (refractCubeCB.Checked)
+            {
+                refl = 0.0f; refr = 0.8f; amb = 0f; dif = 0.0f; env = 1.03f;
+            }
+            else if (cubeSpecularCB.Checked)
             {
                 refl = 0.8f; refr = 0f; amb = 0.05f; dif = 0.0f; env = 1f;
             }
@@ -176,32 +185,10 @@ namespace Indiv2
             }
             cube2.figure_material = new Material(refl, refr, amb, dif, env);
 
-            Sphere s2 = new Sphere(new Vector3D(-2.2f, 1.6f, -1.4f), 1.2f);
-            s2.Pen = new Pen(Color.DarkOrange);
-            s2.figure_material = new Material(0.0f, 0.0f, 0.1f, 0.7f, 1.0f);
-
-            Sphere s3 = new Sphere(new Vector3D(2.5f, 2f, -3.4f), 1.7f);
-            s3.Pen = new Pen(Color.LimeGreen);
-            if (refractSphereCB.Checked)
-            {
-                refl = 0.0f; refr = 0.9f; amb = 0f; dif = 0.0f; env = 1.03f;
-            }
-            else
-            {
-                refl = 0.0f; refr = 0f; amb = 0.1f; dif = 0.9f; env = 1f;
-            }
-            s3.figure_material = new Material(refl, refr, amb, dif, env);
-
-            Sphere s4 = new Sphere(new Vector3D(2.7f, -2.5f, 3.95f), 1.3f);
-            s4.Pen = new Pen(Color.Red);
-            s4.figure_material = new Material(0.7f, 0f, 0.0f, 0.0f, 1f);
-
             scene.Add(room);
             scene.Add(cube1);
             scene.Add(cube2);
             scene.Add(s1);
-            scene.Add(s2);
-            scene.Add(s3);
         }
 
         public void Clear()
@@ -272,7 +259,7 @@ namespace Indiv2
 
             foreach (Figure fig in scene)
                 if (fig.figure_intersection(r, out float t, out Vector3D n))
-                    if (t < max_t && t > Figure.EPS)
+                    if (t < max_t && t > RayTracing.EPS)
                         return false;
             return true;
         }
@@ -310,7 +297,7 @@ namespace Indiv2
 
             Vector3D hit_point = r.start + r.direction * t;
 
-            foreach (Light l in lights)
+            foreach (LightBox l in lights)
             {
                 Vector3D amb = l.color_light * m.ambient;
                 amb.X = (amb.X * m.clr.X);

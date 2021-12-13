@@ -12,7 +12,19 @@ namespace Indiv2.models
         public Figure host = null;
         public List<int> points = new List<int>();
         public Pen drawing_pen = new Pen(Color.Black);
-        public Vector3D Normal;
+        public Vector3D Normal
+        {
+            get
+            {
+                if (points.Count < 3)
+                    return new Vector3D(0, 0, 0);
+                Vector3D U = get_point(1) - get_point(0);
+                Vector3D V = get_point(points.Count - 1) - get_point(0);
+                Vector3D normal = Vector3D.CrossProduct(U, V);
+                normal.Normalize();
+                return normal;
+            }
+        }
 
         public Side(Figure h = null)
         {
@@ -23,7 +35,7 @@ namespace Indiv2.models
             points = new List<int>(s.points);
             host = s.host;
             drawing_pen = s.drawing_pen.Clone() as Pen;
-            Normal = new Vector3D(s.Normal.X,s.Normal.Y,s.Normal.Z);
+            //Normal = new Vector3D(s.Normal.X,s.Normal.Y,s.Normal.Z);
         }
         public Vector3D get_point(int ind)
         {
@@ -32,15 +44,5 @@ namespace Indiv2.models
             return new Vector3D();
         }
 
-        public static Vector3D norm(Side S)
-        {
-            if (S.points.Count < 3)
-                return new Vector3D(0, 0, 0);
-            Vector3D U = S.get_point(1) - S.get_point(0);
-            Vector3D V = S.get_point(S.points.Count - 1) - S.get_point(0);
-            Vector3D normal = Vector3D.CrossProduct(U, V);
-            normal.Normalize();
-            return normal;
-        }
     }
 }

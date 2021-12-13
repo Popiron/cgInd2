@@ -5,12 +5,12 @@ using System.Windows.Media.Media3D;
 
 namespace Indiv2.models.figures
 {
-    public class Light : Figure
+    public class LightBox : Figure
     {
         public Vector3D point_light;       // точка, где находится источник света
         public Vector3D color_light;       // цвет источника света
 
-        public Light(Vector3D p, Vector3D c)
+        public LightBox(Vector3D p, Vector3D c)
         {
             point_light = new Vector3D(p.X,p.Y,p.Z);
             color_light = new Vector3D(c.X,c.Y,c.Z);
