@@ -33,15 +33,24 @@ namespace Indiv2
             this.button1 = new System.Windows.Forms.Button();
             this.twoLightsCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.downWallSpecularCB = new System.Windows.Forms.CheckBox();
-            this.upWallSpecularCB = new System.Windows.Forms.CheckBox();
-            this.rightWallSpecularCB = new System.Windows.Forms.CheckBox();
-            this.leftWallSpecularCB = new System.Windows.Forms.CheckBox();
-            this.backWallSpecularCB = new System.Windows.Forms.CheckBox();
-            this.frontWallSpecularCB = new System.Windows.Forms.CheckBox();
+            this.floorWallSpecularCheckBox = new System.Windows.Forms.CheckBox();
+            this.ceilingWallSpecularCheckBox = new System.Windows.Forms.CheckBox();
+            this.rightWallSpecularCheckBox = new System.Windows.Forms.CheckBox();
+            this.leftWallSpecularCheckBox = new System.Windows.Forms.CheckBox();
+            this.backWallSpecularCheckBox = new System.Windows.Forms.CheckBox();
+            this.frontWallSpecularCheckBox = new System.Windows.Forms.CheckBox();
             this.smallCubeControls = new System.Windows.Forms.GroupBox();
+            this.smallCubeRegularRadioButton = new System.Windows.Forms.RadioButton();
+            this.smallCubeTransparencyRadioButton = new System.Windows.Forms.RadioButton();
+            this.smallCubeSpecularityRadioButton = new System.Windows.Forms.RadioButton();
             this.bigCubeControls = new System.Windows.Forms.GroupBox();
+            this.bigCubeRegularRadioButton = new System.Windows.Forms.RadioButton();
+            this.bigCubeTransparencyRadioButton = new System.Windows.Forms.RadioButton();
+            this.bigCubeSpecularityRadioButton = new System.Windows.Forms.RadioButton();
             this.sphereControls = new System.Windows.Forms.GroupBox();
+            this.sphereRegularRadioButton = new System.Windows.Forms.RadioButton();
+            this.sphereTransparencyRadioButton = new System.Windows.Forms.RadioButton();
+            this.sphereSpecularityRadioButton = new System.Windows.Forms.RadioButton();
             this.secondLightBoxControls = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -49,15 +58,6 @@ namespace Indiv2
             this.zUpDown = new System.Windows.Forms.NumericUpDown();
             this.yUpDown = new System.Windows.Forms.NumericUpDown();
             this.xUpDown = new System.Windows.Forms.NumericUpDown();
-            this.smallCubeSpecularityRadioButton = new System.Windows.Forms.RadioButton();
-            this.smallCubeTransparencyRadioButton = new System.Windows.Forms.RadioButton();
-            this.smallCubeRegularRadioButton = new System.Windows.Forms.RadioButton();
-            this.bigCubeRegularRadioButton = new System.Windows.Forms.RadioButton();
-            this.bigCubeTransparencyRadioButton = new System.Windows.Forms.RadioButton();
-            this.bigCubeSpecularityRadioButton = new System.Windows.Forms.RadioButton();
-            this.sphereRegularRadioButton = new System.Windows.Forms.RadioButton();
-            this.sphereTransparencyRadioButton = new System.Windows.Forms.RadioButton();
-            this.sphereSpecularityRadioButton = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.smallCubeControls.SuspendLayout();
@@ -101,15 +101,16 @@ namespace Indiv2
             this.twoLightsCheckBox.TabIndex = 4;
             this.twoLightsCheckBox.Text = "2 источника";
             this.twoLightsCheckBox.UseVisualStyleBackColor = true;
+            this.twoLightsCheckBox.CheckedChanged += new System.EventHandler(this.twoLightsCheckBox_CheckedChanged);
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.downWallSpecularCB);
-            this.groupBox3.Controls.Add(this.upWallSpecularCB);
-            this.groupBox3.Controls.Add(this.rightWallSpecularCB);
-            this.groupBox3.Controls.Add(this.leftWallSpecularCB);
-            this.groupBox3.Controls.Add(this.backWallSpecularCB);
-            this.groupBox3.Controls.Add(this.frontWallSpecularCB);
+            this.groupBox3.Controls.Add(this.floorWallSpecularCheckBox);
+            this.groupBox3.Controls.Add(this.ceilingWallSpecularCheckBox);
+            this.groupBox3.Controls.Add(this.rightWallSpecularCheckBox);
+            this.groupBox3.Controls.Add(this.leftWallSpecularCheckBox);
+            this.groupBox3.Controls.Add(this.backWallSpecularCheckBox);
+            this.groupBox3.Controls.Add(this.frontWallSpecularCheckBox);
             this.groupBox3.Location = new System.Drawing.Point(1452, 655);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.groupBox3.Name = "groupBox3";
@@ -119,71 +120,71 @@ namespace Indiv2
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Зеркальность стен";
             // 
-            // downWallSpecularCB
+            // floorWallSpecularCheckBox
             // 
-            this.downWallSpecularCB.AutoSize = true;
-            this.downWallSpecularCB.Location = new System.Drawing.Point(13, 357);
-            this.downWallSpecularCB.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.downWallSpecularCB.Name = "downWallSpecularCB";
-            this.downWallSpecularCB.Size = new System.Drawing.Size(133, 36);
-            this.downWallSpecularCB.TabIndex = 0;
-            this.downWallSpecularCB.Text = "Нижняя";
-            this.downWallSpecularCB.UseVisualStyleBackColor = true;
+            this.floorWallSpecularCheckBox.AutoSize = true;
+            this.floorWallSpecularCheckBox.Location = new System.Drawing.Point(13, 357);
+            this.floorWallSpecularCheckBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.floorWallSpecularCheckBox.Name = "floorWallSpecularCheckBox";
+            this.floorWallSpecularCheckBox.Size = new System.Drawing.Size(133, 36);
+            this.floorWallSpecularCheckBox.TabIndex = 0;
+            this.floorWallSpecularCheckBox.Text = "Нижняя";
+            this.floorWallSpecularCheckBox.UseVisualStyleBackColor = true;
             // 
-            // upWallSpecularCB
+            // ceilingWallSpecularCheckBox
             // 
-            this.upWallSpecularCB.AutoSize = true;
-            this.upWallSpecularCB.Location = new System.Drawing.Point(13, 300);
-            this.upWallSpecularCB.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.upWallSpecularCB.Name = "upWallSpecularCB";
-            this.upWallSpecularCB.Size = new System.Drawing.Size(136, 36);
-            this.upWallSpecularCB.TabIndex = 0;
-            this.upWallSpecularCB.Text = "Верхняя";
-            this.upWallSpecularCB.UseVisualStyleBackColor = true;
+            this.ceilingWallSpecularCheckBox.AutoSize = true;
+            this.ceilingWallSpecularCheckBox.Location = new System.Drawing.Point(13, 300);
+            this.ceilingWallSpecularCheckBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.ceilingWallSpecularCheckBox.Name = "ceilingWallSpecularCheckBox";
+            this.ceilingWallSpecularCheckBox.Size = new System.Drawing.Size(136, 36);
+            this.ceilingWallSpecularCheckBox.TabIndex = 0;
+            this.ceilingWallSpecularCheckBox.Text = "Верхняя";
+            this.ceilingWallSpecularCheckBox.UseVisualStyleBackColor = true;
             // 
-            // rightWallSpecularCB
+            // rightWallSpecularCheckBox
             // 
-            this.rightWallSpecularCB.AutoSize = true;
-            this.rightWallSpecularCB.Location = new System.Drawing.Point(13, 244);
-            this.rightWallSpecularCB.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.rightWallSpecularCB.Name = "rightWallSpecularCB";
-            this.rightWallSpecularCB.Size = new System.Drawing.Size(126, 36);
-            this.rightWallSpecularCB.TabIndex = 0;
-            this.rightWallSpecularCB.Text = "Правая";
-            this.rightWallSpecularCB.UseVisualStyleBackColor = true;
+            this.rightWallSpecularCheckBox.AutoSize = true;
+            this.rightWallSpecularCheckBox.Location = new System.Drawing.Point(13, 244);
+            this.rightWallSpecularCheckBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.rightWallSpecularCheckBox.Name = "rightWallSpecularCheckBox";
+            this.rightWallSpecularCheckBox.Size = new System.Drawing.Size(126, 36);
+            this.rightWallSpecularCheckBox.TabIndex = 0;
+            this.rightWallSpecularCheckBox.Text = "Правая";
+            this.rightWallSpecularCheckBox.UseVisualStyleBackColor = true;
             // 
-            // leftWallSpecularCB
+            // leftWallSpecularCheckBox
             // 
-            this.leftWallSpecularCB.AutoSize = true;
-            this.leftWallSpecularCB.Location = new System.Drawing.Point(13, 187);
-            this.leftWallSpecularCB.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.leftWallSpecularCB.Name = "leftWallSpecularCB";
-            this.leftWallSpecularCB.Size = new System.Drawing.Size(112, 36);
-            this.leftWallSpecularCB.TabIndex = 0;
-            this.leftWallSpecularCB.Text = "Левая";
-            this.leftWallSpecularCB.UseVisualStyleBackColor = true;
+            this.leftWallSpecularCheckBox.AutoSize = true;
+            this.leftWallSpecularCheckBox.Location = new System.Drawing.Point(13, 187);
+            this.leftWallSpecularCheckBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.leftWallSpecularCheckBox.Name = "leftWallSpecularCheckBox";
+            this.leftWallSpecularCheckBox.Size = new System.Drawing.Size(112, 36);
+            this.leftWallSpecularCheckBox.TabIndex = 0;
+            this.leftWallSpecularCheckBox.Text = "Левая";
+            this.leftWallSpecularCheckBox.UseVisualStyleBackColor = true;
             // 
-            // backWallSpecularCB
+            // backWallSpecularCheckBox
             // 
-            this.backWallSpecularCB.AutoSize = true;
-            this.backWallSpecularCB.Location = new System.Drawing.Point(13, 130);
-            this.backWallSpecularCB.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.backWallSpecularCB.Name = "backWallSpecularCB";
-            this.backWallSpecularCB.Size = new System.Drawing.Size(122, 36);
-            this.backWallSpecularCB.TabIndex = 0;
-            this.backWallSpecularCB.Text = "Задняя";
-            this.backWallSpecularCB.UseVisualStyleBackColor = true;
+            this.backWallSpecularCheckBox.AutoSize = true;
+            this.backWallSpecularCheckBox.Location = new System.Drawing.Point(13, 130);
+            this.backWallSpecularCheckBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.backWallSpecularCheckBox.Name = "backWallSpecularCheckBox";
+            this.backWallSpecularCheckBox.Size = new System.Drawing.Size(122, 36);
+            this.backWallSpecularCheckBox.TabIndex = 0;
+            this.backWallSpecularCheckBox.Text = "Задняя";
+            this.backWallSpecularCheckBox.UseVisualStyleBackColor = true;
             // 
-            // frontWallSpecularCB
+            // frontWallSpecularCheckBox
             // 
-            this.frontWallSpecularCB.AutoSize = true;
-            this.frontWallSpecularCB.Location = new System.Drawing.Point(13, 74);
-            this.frontWallSpecularCB.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.frontWallSpecularCB.Name = "frontWallSpecularCB";
-            this.frontWallSpecularCB.Size = new System.Drawing.Size(154, 36);
-            this.frontWallSpecularCB.TabIndex = 0;
-            this.frontWallSpecularCB.Text = "Передняя";
-            this.frontWallSpecularCB.UseVisualStyleBackColor = true;
+            this.frontWallSpecularCheckBox.AutoSize = true;
+            this.frontWallSpecularCheckBox.Location = new System.Drawing.Point(13, 74);
+            this.frontWallSpecularCheckBox.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.frontWallSpecularCheckBox.Name = "frontWallSpecularCheckBox";
+            this.frontWallSpecularCheckBox.Size = new System.Drawing.Size(154, 36);
+            this.frontWallSpecularCheckBox.TabIndex = 0;
+            this.frontWallSpecularCheckBox.Text = "Передняя";
+            this.frontWallSpecularCheckBox.UseVisualStyleBackColor = true;
             // 
             // smallCubeControls
             // 
@@ -197,6 +198,39 @@ namespace Indiv2
             this.smallCubeControls.TabStop = false;
             this.smallCubeControls.Text = "Малый куб";
             // 
+            // smallCubeRegularRadioButton
+            // 
+            this.smallCubeRegularRadioButton.AutoSize = true;
+            this.smallCubeRegularRadioButton.Location = new System.Drawing.Point(11, 138);
+            this.smallCubeRegularRadioButton.Name = "smallCubeRegularRadioButton";
+            this.smallCubeRegularRadioButton.Size = new System.Drawing.Size(153, 36);
+            this.smallCubeRegularRadioButton.TabIndex = 5;
+            this.smallCubeRegularRadioButton.TabStop = true;
+            this.smallCubeRegularRadioButton.Text = "Обычный";
+            this.smallCubeRegularRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // smallCubeTransparencyRadioButton
+            // 
+            this.smallCubeTransparencyRadioButton.AutoSize = true;
+            this.smallCubeTransparencyRadioButton.Location = new System.Drawing.Point(11, 96);
+            this.smallCubeTransparencyRadioButton.Name = "smallCubeTransparencyRadioButton";
+            this.smallCubeTransparencyRadioButton.Size = new System.Drawing.Size(186, 36);
+            this.smallCubeTransparencyRadioButton.TabIndex = 4;
+            this.smallCubeTransparencyRadioButton.TabStop = true;
+            this.smallCubeTransparencyRadioButton.Text = "Прозрачный";
+            this.smallCubeTransparencyRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // smallCubeSpecularityRadioButton
+            // 
+            this.smallCubeSpecularityRadioButton.AutoSize = true;
+            this.smallCubeSpecularityRadioButton.Location = new System.Drawing.Point(13, 56);
+            this.smallCubeSpecularityRadioButton.Name = "smallCubeSpecularityRadioButton";
+            this.smallCubeSpecularityRadioButton.Size = new System.Drawing.Size(179, 36);
+            this.smallCubeSpecularityRadioButton.TabIndex = 3;
+            this.smallCubeSpecularityRadioButton.TabStop = true;
+            this.smallCubeSpecularityRadioButton.Text = "Зеркальный";
+            this.smallCubeSpecularityRadioButton.UseVisualStyleBackColor = true;
+            // 
             // bigCubeControls
             // 
             this.bigCubeControls.Controls.Add(this.bigCubeRegularRadioButton);
@@ -209,6 +243,39 @@ namespace Indiv2
             this.bigCubeControls.TabStop = false;
             this.bigCubeControls.Text = "Большой куб";
             // 
+            // bigCubeRegularRadioButton
+            // 
+            this.bigCubeRegularRadioButton.AutoSize = true;
+            this.bigCubeRegularRadioButton.Location = new System.Drawing.Point(13, 129);
+            this.bigCubeRegularRadioButton.Name = "bigCubeRegularRadioButton";
+            this.bigCubeRegularRadioButton.Size = new System.Drawing.Size(153, 36);
+            this.bigCubeRegularRadioButton.TabIndex = 8;
+            this.bigCubeRegularRadioButton.TabStop = true;
+            this.bigCubeRegularRadioButton.Text = "Обычный";
+            this.bigCubeRegularRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // bigCubeTransparencyRadioButton
+            // 
+            this.bigCubeTransparencyRadioButton.AutoSize = true;
+            this.bigCubeTransparencyRadioButton.Location = new System.Drawing.Point(13, 87);
+            this.bigCubeTransparencyRadioButton.Name = "bigCubeTransparencyRadioButton";
+            this.bigCubeTransparencyRadioButton.Size = new System.Drawing.Size(186, 36);
+            this.bigCubeTransparencyRadioButton.TabIndex = 7;
+            this.bigCubeTransparencyRadioButton.TabStop = true;
+            this.bigCubeTransparencyRadioButton.Text = "Прозрачный";
+            this.bigCubeTransparencyRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // bigCubeSpecularityRadioButton
+            // 
+            this.bigCubeSpecularityRadioButton.AutoSize = true;
+            this.bigCubeSpecularityRadioButton.Location = new System.Drawing.Point(15, 47);
+            this.bigCubeSpecularityRadioButton.Name = "bigCubeSpecularityRadioButton";
+            this.bigCubeSpecularityRadioButton.Size = new System.Drawing.Size(179, 36);
+            this.bigCubeSpecularityRadioButton.TabIndex = 6;
+            this.bigCubeSpecularityRadioButton.TabStop = true;
+            this.bigCubeSpecularityRadioButton.Text = "Зеркальный";
+            this.bigCubeSpecularityRadioButton.UseVisualStyleBackColor = true;
+            // 
             // sphereControls
             // 
             this.sphereControls.Controls.Add(this.sphereRegularRadioButton);
@@ -220,6 +287,39 @@ namespace Indiv2
             this.sphereControls.TabIndex = 8;
             this.sphereControls.TabStop = false;
             this.sphereControls.Text = "Сфера";
+            // 
+            // sphereRegularRadioButton
+            // 
+            this.sphereRegularRadioButton.AutoSize = true;
+            this.sphereRegularRadioButton.Location = new System.Drawing.Point(11, 125);
+            this.sphereRegularRadioButton.Name = "sphereRegularRadioButton";
+            this.sphereRegularRadioButton.Size = new System.Drawing.Size(153, 36);
+            this.sphereRegularRadioButton.TabIndex = 11;
+            this.sphereRegularRadioButton.TabStop = true;
+            this.sphereRegularRadioButton.Text = "Обычный";
+            this.sphereRegularRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // sphereTransparencyRadioButton
+            // 
+            this.sphereTransparencyRadioButton.AutoSize = true;
+            this.sphereTransparencyRadioButton.Location = new System.Drawing.Point(11, 83);
+            this.sphereTransparencyRadioButton.Name = "sphereTransparencyRadioButton";
+            this.sphereTransparencyRadioButton.Size = new System.Drawing.Size(186, 36);
+            this.sphereTransparencyRadioButton.TabIndex = 10;
+            this.sphereTransparencyRadioButton.TabStop = true;
+            this.sphereTransparencyRadioButton.Text = "Прозрачный";
+            this.sphereTransparencyRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // sphereSpecularityRadioButton
+            // 
+            this.sphereSpecularityRadioButton.AutoSize = true;
+            this.sphereSpecularityRadioButton.Location = new System.Drawing.Point(13, 43);
+            this.sphereSpecularityRadioButton.Name = "sphereSpecularityRadioButton";
+            this.sphereSpecularityRadioButton.Size = new System.Drawing.Size(179, 36);
+            this.sphereSpecularityRadioButton.TabIndex = 9;
+            this.sphereSpecularityRadioButton.TabStop = true;
+            this.sphereSpecularityRadioButton.Text = "Зеркальный";
+            this.sphereSpecularityRadioButton.UseVisualStyleBackColor = true;
             // 
             // secondLightBoxControls
             // 
@@ -284,105 +384,6 @@ namespace Indiv2
             this.xUpDown.Size = new System.Drawing.Size(88, 39);
             this.xUpDown.TabIndex = 0;
             // 
-            // smallCubeSpecularityRadioButton
-            // 
-            this.smallCubeSpecularityRadioButton.AutoSize = true;
-            this.smallCubeSpecularityRadioButton.Location = new System.Drawing.Point(13, 56);
-            this.smallCubeSpecularityRadioButton.Name = "smallCubeSpecularityRadioButton";
-            this.smallCubeSpecularityRadioButton.Size = new System.Drawing.Size(179, 36);
-            this.smallCubeSpecularityRadioButton.TabIndex = 3;
-            this.smallCubeSpecularityRadioButton.TabStop = true;
-            this.smallCubeSpecularityRadioButton.Text = "Зеркальный";
-            this.smallCubeSpecularityRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // smallCubeTransparencyRadioButton
-            // 
-            this.smallCubeTransparencyRadioButton.AutoSize = true;
-            this.smallCubeTransparencyRadioButton.Location = new System.Drawing.Point(11, 96);
-            this.smallCubeTransparencyRadioButton.Name = "smallCubeTransparencyRadioButton";
-            this.smallCubeTransparencyRadioButton.Size = new System.Drawing.Size(186, 36);
-            this.smallCubeTransparencyRadioButton.TabIndex = 4;
-            this.smallCubeTransparencyRadioButton.TabStop = true;
-            this.smallCubeTransparencyRadioButton.Text = "Прозрачный";
-            this.smallCubeTransparencyRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // smallCubeRegularRadioButton
-            // 
-            this.smallCubeRegularRadioButton.AutoSize = true;
-            this.smallCubeRegularRadioButton.Location = new System.Drawing.Point(11, 138);
-            this.smallCubeRegularRadioButton.Name = "smallCubeRegularRadioButton";
-            this.smallCubeRegularRadioButton.Size = new System.Drawing.Size(153, 36);
-            this.smallCubeRegularRadioButton.TabIndex = 5;
-            this.smallCubeRegularRadioButton.TabStop = true;
-            this.smallCubeRegularRadioButton.Text = "Обычный";
-            this.smallCubeRegularRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // bigCubeRegularRadioButton
-            // 
-            this.bigCubeRegularRadioButton.AutoSize = true;
-            this.bigCubeRegularRadioButton.Location = new System.Drawing.Point(13, 129);
-            this.bigCubeRegularRadioButton.Name = "bigCubeRegularRadioButton";
-            this.bigCubeRegularRadioButton.Size = new System.Drawing.Size(153, 36);
-            this.bigCubeRegularRadioButton.TabIndex = 8;
-            this.bigCubeRegularRadioButton.TabStop = true;
-            this.bigCubeRegularRadioButton.Text = "Обычный";
-            this.bigCubeRegularRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // bigCubeTransparencyRadioButton
-            // 
-            this.bigCubeTransparencyRadioButton.AutoSize = true;
-            this.bigCubeTransparencyRadioButton.Location = new System.Drawing.Point(13, 87);
-            this.bigCubeTransparencyRadioButton.Name = "bigCubeTransparencyRadioButton";
-            this.bigCubeTransparencyRadioButton.Size = new System.Drawing.Size(186, 36);
-            this.bigCubeTransparencyRadioButton.TabIndex = 7;
-            this.bigCubeTransparencyRadioButton.TabStop = true;
-            this.bigCubeTransparencyRadioButton.Text = "Прозрачный";
-            this.bigCubeTransparencyRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // bigCubeSpecularityRadioButton
-            // 
-            this.bigCubeSpecularityRadioButton.AutoSize = true;
-            this.bigCubeSpecularityRadioButton.Location = new System.Drawing.Point(15, 47);
-            this.bigCubeSpecularityRadioButton.Name = "bigCubeSpecularityRadioButton";
-            this.bigCubeSpecularityRadioButton.Size = new System.Drawing.Size(179, 36);
-            this.bigCubeSpecularityRadioButton.TabIndex = 6;
-            this.bigCubeSpecularityRadioButton.TabStop = true;
-            this.bigCubeSpecularityRadioButton.Text = "Зеркальный";
-            this.bigCubeSpecularityRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // sphereRegularRadioButton
-            // 
-            this.sphereRegularRadioButton.AutoSize = true;
-            this.sphereRegularRadioButton.Location = new System.Drawing.Point(11, 125);
-            this.sphereRegularRadioButton.Name = "sphereRegularRadioButton";
-            this.sphereRegularRadioButton.Size = new System.Drawing.Size(153, 36);
-            this.sphereRegularRadioButton.TabIndex = 11;
-            this.sphereRegularRadioButton.TabStop = true;
-            this.sphereRegularRadioButton.Text = "Обычный";
-            this.sphereRegularRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // sphereTransparencyRadioButton
-            // 
-            this.sphereTransparencyRadioButton.AutoSize = true;
-            this.sphereTransparencyRadioButton.Location = new System.Drawing.Point(11, 83);
-            this.sphereTransparencyRadioButton.Name = "sphereTransparencyRadioButton";
-            this.sphereTransparencyRadioButton.Size = new System.Drawing.Size(186, 36);
-            this.sphereTransparencyRadioButton.TabIndex = 10;
-            this.sphereTransparencyRadioButton.TabStop = true;
-            this.sphereTransparencyRadioButton.Text = "Прозрачный";
-            this.sphereTransparencyRadioButton.UseVisualStyleBackColor = true;
-            // 
-            // sphereSpecularityRadioButton
-            // 
-            this.sphereSpecularityRadioButton.AutoSize = true;
-            this.sphereSpecularityRadioButton.Location = new System.Drawing.Point(13, 43);
-            this.sphereSpecularityRadioButton.Name = "sphereSpecularityRadioButton";
-            this.sphereSpecularityRadioButton.Size = new System.Drawing.Size(179, 36);
-            this.sphereSpecularityRadioButton.TabIndex = 9;
-            this.sphereSpecularityRadioButton.TabStop = true;
-            this.sphereSpecularityRadioButton.Text = "Зеркальный";
-            this.sphereSpecularityRadioButton.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
@@ -427,12 +428,12 @@ namespace Indiv2
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox twoLightsCheckBox;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.CheckBox frontWallSpecularCB;
-        private System.Windows.Forms.CheckBox rightWallSpecularCB;
-        private System.Windows.Forms.CheckBox leftWallSpecularCB;
-        private System.Windows.Forms.CheckBox backWallSpecularCB;
-        private System.Windows.Forms.CheckBox downWallSpecularCB;
-        private System.Windows.Forms.CheckBox upWallSpecularCB;
+        private System.Windows.Forms.CheckBox frontWallSpecularCheckBox;
+        private System.Windows.Forms.CheckBox rightWallSpecularCheckBox;
+        private System.Windows.Forms.CheckBox leftWallSpecularCheckBox;
+        private System.Windows.Forms.CheckBox backWallSpecularCheckBox;
+        private System.Windows.Forms.CheckBox floorWallSpecularCheckBox;
+        private System.Windows.Forms.CheckBox ceilingWallSpecularCheckBox;
         private System.Windows.Forms.GroupBox smallCubeControls;
         private System.Windows.Forms.GroupBox bigCubeControls;
         private System.Windows.Forms.GroupBox sphereControls;

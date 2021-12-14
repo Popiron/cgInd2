@@ -18,17 +18,17 @@ namespace Indiv2.models
             {
                 if (vertices.Count < 3)
                     return new Vector3D(0, 0, 0);
-                Vector3D U = get_point(1) - get_point(0);
-                Vector3D V = get_point(vertices.Count - 1) - get_point(0);
+                Vector3D U = pointByIndex(1) - pointByIndex(0);
+                Vector3D V = pointByIndex(vertices.Count - 1) - pointByIndex(0);
                 Vector3D normal = Vector3D.CrossProduct(U, V);
                 normal.Normalize();
                 return normal;
             }
         }
 
-        public Face(Figure h = null)
+        public Face(Figure pictureHeight = null)
         {
-            owner = h;
+            owner = pictureHeight;
         }
         public Face(Face s)
         {
@@ -36,7 +36,7 @@ namespace Indiv2.models
             owner = s.owner;
             pen = s.pen.Clone() as Pen;
         }
-        public Vector3D get_point(int ind)
+        public Vector3D pointByIndex(int ind)
         {
             if (owner != null)
                 return owner.vertices[vertices[ind]];

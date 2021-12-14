@@ -1,9 +1,7 @@
 ﻿using Indiv2.logi;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Media.Media3D;
 
 namespace Indiv2.models.figures
@@ -87,7 +85,7 @@ namespace Indiv2.models.figures
 
                 if ( faces[i].vertices.Count == 3)
                 {
-                    if (RayTracing.ray_intersects_triangle(ray,  faces[i].get_point(0),  faces[i].get_point(1),  faces[i].get_point(2), out float t) && (interValue == 0 || t < interValue))
+                    if (RayTracing.ray_intersects_triangle(ray,  faces[i].pointByIndex(0),  faces[i].pointByIndex(1),  faces[i].pointByIndex(2), out float t) && (interValue == 0 || t < interValue))
                     {
                         interValue = t;
                         face =  faces[i];
@@ -95,13 +93,13 @@ namespace Indiv2.models.figures
                 }
                 else if ( faces[i].vertices.Count == 4)
                 {
-                    if (RayTracing.ray_intersects_triangle(ray,  faces[i].get_point(0),  faces[i].get_point(1),  faces[i].get_point(3), out float t) && (interValue == 0 || t < interValue))
+                    if (RayTracing.ray_intersects_triangle(ray,  faces[i].pointByIndex(0),  faces[i].pointByIndex(1),  faces[i].pointByIndex(3), out float t) && (interValue == 0 || t < interValue))
                     {
                         wallId = i;
                         interValue = t;
                         face =  faces[i];
                     }
-                    else if (RayTracing.ray_intersects_triangle(ray,  faces[i].get_point(1),  faces[i].get_point(2),  faces[i].get_point(3), out t) && (interValue == 0 || t < interValue))
+                    else if (RayTracing.ray_intersects_triangle(ray,  faces[i].pointByIndex(1),  faces[i].pointByIndex(2),  faces[i].pointByIndex(3), out t) && (interValue == 0 || t < interValue))
                     {
                         wallId = i;
                         interValue = t;

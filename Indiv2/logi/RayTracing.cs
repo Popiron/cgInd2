@@ -18,15 +18,15 @@ namespace Indiv2.logi
 
             Vector3D edge1 = p1 - p0;
             Vector3D edge2 = p2 - p0;
-            Vector3D h = Vector3D.CrossProduct(ray.direction, edge2);
-            float a = (float)Vector3D.DotProduct(edge1, h);
+            Vector3D pictureHeight = Vector3D.CrossProduct(ray.direction, edge2);
+            float a = (float)Vector3D.DotProduct(edge1, pictureHeight);
 
             if (a > -EPS && a < EPS)
                 return false;       // This ray is parallel to this triangle.
 
             float f = 1.0f / a;
             Vector3D s = ray.begin - p0;
-            float u = f * (float)Vector3D.DotProduct(s, h);
+            float u = f * (float)Vector3D.DotProduct(s, pictureHeight);
 
             if (u < 0 || u > 1)
                 return false;
