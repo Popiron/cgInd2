@@ -12,27 +12,27 @@ namespace Indiv2.logi
     {
         public static float EPS = 0.00001f;
 
-        public static bool ray_intersects_triangle(Ray r, Vector3D p0, Vector3D p1, Vector3D p2, out float intersect)
+        public static bool ray_intersects_triangle(Ray ray, Vector3D p0, Vector3D p1, Vector3D p2, out float interValue)
         {
-            intersect = -1;
+            interValue = -1;
 
             Vector3D edge1 = p1 - p0;
             Vector3D edge2 = p2 - p0;
-            Vector3D h = Vector3D.CrossProduct(r.direction, edge2);
+            Vector3D h = Vector3D.CrossProduct(ray.direction, edge2);
             float a = (float)Vector3D.DotProduct(edge1, h);
 
             if (a > -EPS && a < EPS)
                 return false;       // This ray is parallel to this triangle.
 
             float f = 1.0f / a;
-            Vector3D s = r.start - p0;
+            Vector3D s = ray.begin - p0;
             float u = f * (float)Vector3D.DotProduct(s, h);
 
             if (u < 0 || u > 1)
                 return false;
 
             Vector3D q = Vector3D.CrossProduct(s, edge1);
-            float v = f * (float)Vector3D.DotProduct(r.direction, q);
+            float v = f * (float)Vector3D.DotProduct(ray.direction, q);
 
             if (v < 0 || u + v > 1)
                 return false;
@@ -40,17 +40,17 @@ namespace Indiv2.logi
             float t = f * (float)Vector3D.DotProduct(edge2, q);
             if (t > EPS)
             {
-                intersect = t;
+                interValue = t;
                 return true;
             }
             else      // This means that there is a line intersection but not a ray intersection.
                 return false;
         }
 
-        public static bool ray_sphere_intersection(Ray r, Vector3D sphere_pos, float sphere_rad, out float t)
+        public static bool ray_sphere_intersection(Ray ray, Vector3D sphere_pos, float sphere_rad, out float t)
         {
-            Vector3D k = r.start - sphere_pos;
-            float b = (float)Vector3D.DotProduct(k, r.direction);
+            Vector3D k = ray.begin - sphere_pos;
+            float b = (float)Vector3D.DotProduct(k, ray.direction);
             float c = (float)Vector3D.DotProduct(k, k) - sphere_rad * sphere_rad;
             float d = b * b - c;
             t = 0;

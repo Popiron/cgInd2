@@ -20,8 +20,8 @@ namespace Indiv2
     {
 
         public List<Figure> scene = new List<Figure>();
-        public List<LightBox> lights = new List<LightBox>();   // список источников света
-        public Color[,] color_pixels;                    // цвета пикселей для отображения на pictureBox
+        public List<LightBox> lights = new List<LightBox>();
+        public Color[,] color_pixels;
         public Vector3D[,] pixels;
         public Vector3D focus;
         public Vector3D up_left, up_right, down_left, down_right;
@@ -38,157 +38,156 @@ namespace Indiv2
             h = pictureBox1.Height;
             w = pictureBox1.Width;
             pictureBox1.Image = new Bitmap(w, h);
-            cubeSpecularCB.Checked = true;
-            sphereSpecularCB.Checked = false;
-            refractCubeCB.Checked = false;
-            refractSphereCB.Checked = true;
-            frontWallSpecularCB.Checked = backWallSpecularCB.Checked = leftWallSpecularCB.Checked = rightWallSpecularCB.Checked = false;
-            twoLightsCB.Checked = false;
+            smallCubeRegularRadioButton.Checked = true;
+            bigCubeSpecularityRadioButton.Checked = true;
+            sphereTransparencyRadioButton.Checked = true;
+            twoLightsCheckBox.Checked = false;
         }
 
         public void build_scene()
         {
             Room room = new Room(ReadyFigures.Hexahedron(10));
-            up_left = room.sides[0].get_point(0);
-            up_right = room.sides[0].get_point(1);
-            down_right = room.sides[0].get_point(2);
-            down_left = room.sides[0].get_point(3);
+            up_left = room.faces[0].get_point(0);
+            up_right = room.faces[0].get_point(1);
+            down_right = room.faces[0].get_point(2);
+            down_left = room.faces[0].get_point(3);
 
-            Vector3D normal = room.sides[0].Normal;                            // нормаль стороны комнаты
-            Vector3D center = (up_left + up_right + down_left + down_right) / 4;   // центр стороны комнаты
+            Vector3D normal = room.faces[0].Normal;                            
+            Vector3D center = (up_left + up_right + down_left + down_right) / 4;
             focus = center + normal * 10;
 
             room.Pen = new Pen(Color.Gray);
 
-            float refl, refr, amb, dif, env;
+            float reflection, refraction, ambient, diffuse, environment;
 
-            room.sides[0].drawing_pen = new Pen(Color.White);
+            room.faces[0].pen = new Pen(Color.White);
             if (backWallSpecularCB.Checked)
             {
-                refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
+                reflection = 0.8f; refraction = 0f; ambient = 0.0f; diffuse = 0.0f; environment = 1f;
             }
             else
             {
-                refl = 0.0f; refr = 0f; amb = 0.1f; dif = 0.8f; env = 1f;
+                reflection = 0.0f; refraction = 0f; ambient = 0.1f; diffuse = 0.8f; environment = 1f;
             }
-            room.back_wall_material = new Material(refl, refr, amb, dif, env);
+            room.back = new Material(reflection, refraction, ambient, diffuse, environment);
 
-            room.sides[1].drawing_pen = new Pen(Color.White);
+            room.faces[1].pen = new Pen(Color.White);
             if (frontWallSpecularCB.Checked)
             {
-                refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
+                reflection = 0.8f; refraction = 0f; ambient = 0.0f; diffuse = 0.0f; environment = 1f;
             }
             else
             {
-                refl = 0.0f; refr = 0f; amb = 0.1f; dif = 0.8f; env = 1f;
+                reflection = 0.0f; refraction = 0f; ambient = 0.1f; diffuse = 0.8f; environment = 1f;
             }
-            room.front_wall_material = new Material(refl, refr, amb, dif, env);
+            room.front = new Material(reflection, refraction, ambient, diffuse, environment);
 
-            room.sides[2].drawing_pen = new Pen(Color.Blue);
+            room.faces[2].pen = new Pen(Color.Blue);
             if (rightWallSpecularCB.Checked)
             {
-                refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
+                reflection = 0.8f; refraction = 0f; ambient = 0.0f; diffuse = 0.0f; environment = 1f;
             }
             else
             {
-                refl = 0.0f; refr = 0f; amb = 0.1f; dif = 0.8f; env = 1f;
+                reflection = 0.0f; refraction = 0f; ambient = 0.1f; diffuse = 0.8f; environment = 1f;
             }
-            room.right_wall_material = new Material(refl, refr, amb, dif, env);
+            room.right = new Material(reflection, refraction, ambient, diffuse, environment);
 
-            room.sides[3].drawing_pen = new Pen(Color.Red);
+            room.faces[3].pen = new Pen(Color.Red);
             if (leftWallSpecularCB.Checked)
             {
-                refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
+                reflection = 0.8f; refraction = 0f; ambient = 0.0f; diffuse = 0.0f; environment = 1f;
             }
             else
             {
-                refl = 0.0f; refr = 0f; amb = 0.1f; dif = 0.8f; env = 1f;
+                reflection = 0.0f; refraction = 0f; ambient = 0.1f; diffuse = 0.8f; environment = 1f;
             }
-            room.left_wall_material = new Material(refl, refr, amb, dif, env);
+            room.left = new Material(reflection, refraction, ambient, diffuse, environment);
 
             if (upWallSpecularCB.Checked)
             {
-                refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
+                reflection = 0.8f; refraction = 0f; ambient = 0.0f; diffuse = 0.0f; environment = 1f;
             }
             else
             {
-                refl = 0.0f; refr = 0f; amb = 0.1f; dif = 0.8f; env = 1f;
+                reflection = 0.0f; refraction = 0f; ambient = 0.1f; diffuse = 0.8f; environment = 1f;
             }
-            room.up_wall_material = new Material(refl, refr, amb, dif, env);
+            room.ceiling = new Material(reflection, refraction, ambient, diffuse, environment);
 
             if (downWallSpecularCB.Checked)
             {
-                refl = 0.8f; refr = 0f; amb = 0.0f; dif = 0.0f; env = 1f;
+                reflection = 0.8f; refraction = 0f; ambient = 0.0f; diffuse = 0.0f; environment = 1f;
             }
             else
             {
-                refl = 0.0f; refr = 0f; amb = 0.1f; dif = 0.8f; env = 1f;
+                reflection = 0.0f; refraction = 0f; ambient = 0.1f; diffuse = 0.8f; environment = 1f;
             }
-            room.down_wall_material = new Material(refl, refr, amb, dif, env);
+            room.floor = new Material(reflection, refraction, ambient, diffuse, environment);
 
-            LightBox l1 = new LightBox(new Vector3D(0f, 1f, 4.9f), new Vector3D(1f, 1f, 1f));
-            lights.Add(l1);
-            if (twoLightsCB.Checked)
+            LightBox lightBox1 = new LightBox(new Vector3D(0f, 1f, 4.9f), new Vector3D(1f, 1f, 1f));
+            lights.Add(lightBox1);
+            if (twoLightsCheckBox.Checked)
             {
-                LightBox l2 = new LightBox(new Vector3D(0f, 4f, -4.9f), new Vector3D(1f, 1f, 1f));
-                lights.Add(l2);
+                LightBox lightBox2 = new LightBox(new Vector3D(0f, 4f, -4.9f), new Vector3D(1f, 1f, 1f));
+                lights.Add(lightBox2);
             }
 
-            Sphere s1 = new Sphere(new Vector3D(0.7f, 3.5f, -4.0f), 1f);
-            s1.drawing_pen = new Pen(Color.White);
-            if (sphereSpecularCB.Checked)
+            Sphere sphere = new Sphere(new Vector3D(0.7f, 3.5f, -4.0f), 1f);
+            sphere.pen = new Pen(Color.White);
+            if (sphereSpecularityRadioButton.Checked)
             {
-                refl = 0.9f; refr = 0f; amb = 0f; dif = 0.1f; env = 1f;
+                reflection = 0.9f; refraction = 0f; ambient = 0f; diffuse = 0.1f; environment = 1f;
             }
-            else if (refractSphereCB.Checked)
+            else if (sphereTransparencyRadioButton.Checked)
             {
-                refl = 0.0f; refr = 0.9f; amb = 0f; dif = 0.0f; env = 1.03f;
+                reflection = 0.0f; refraction = 0.9f; ambient = 0f; diffuse = 0.0f; environment = 1.03f;
             }
             else
             {
-                refl = 0.0f; refr = 0f; amb = 0.1f; dif = 0.8f; env = 1f;
+                reflection = 0.0f; refraction = 0f; ambient = 0.1f; diffuse = 0.8f; environment = 1f;
             }
-            s1.figure_material = new Material(refl, refr, amb, dif, env);
+            sphere.material = new Material(reflection, refraction, ambient, diffuse, environment);
 
-            Figure cube1 = ReadyFigures.Hexahedron(3.0f);
-            AphineTransforms.offset(cube1, 2.5f, 0.0f, -3.3f);
-            cube1.Pen = new Pen(Color.Yellow);
-            if (refractCubeCB.Checked)
+            Figure smallCube = ReadyFigures.Hexahedron(3.0f);
+            AphineTransforms.offset(smallCube, 2.5f, 0.0f, -3.3f);
+            smallCube.Pen = new Pen(Color.Yellow);
+            if (smallCubeTransparencyRadioButton.Checked)
             {
-                refl = 0.0f; refr = 0.8f; amb = 0f; dif = 0.0f; env = 1.03f;
+                reflection = 0.0f; refraction = 0.8f; ambient = 0f; diffuse = 0.0f; environment = 1.03f;
             }
-            if (cubeSpecularCB.Checked)
+            if (smallCubeSpecularityRadioButton.Checked)
             {
-                refl = 0.8f; refr = 0f; amb = 0.05f; dif = 0.0f; env = 1f;
+                reflection = 0.8f; refraction = 0f; ambient = 0.05f; diffuse = 0.0f; environment = 1f;
             }
             else
             {
-                refl = 0f; refr = 0f; amb = 0.1f; dif = 0.7f; env = 1f;
+                reflection = 0f; refraction = 0f; ambient = 0.1f; diffuse = 0.7f; environment = 1f;
             }
-            cube1.figure_material = new Material(refl, refr, amb, dif, env);
+            smallCube.material = new Material(reflection, refraction, ambient, diffuse, environment);
 
-            Figure cube2 = ReadyFigures.Hexahedron(5.0f);
-            AphineTransforms.offset(cube2, -2.0f, -1.5f, -2.5f);
-            AphineTransforms.rotate_around(cube2, 30, "CZ");
-            cube2.Pen = new Pen(Color.White);
-            if (refractCubeCB.Checked)
+            Figure bigCube = ReadyFigures.Hexahedron(5.0f);
+            AphineTransforms.offset(bigCube, -2.0f, -1.5f, -2.5f);
+            AphineTransforms.rotateAround(bigCube, 30, Axis.Z);
+            bigCube.Pen = new Pen(Color.White);
+            if (bigCubeTransparencyRadioButton.Checked)
             {
-                refl = 0.0f; refr = 0.8f; amb = 0f; dif = 0.0f; env = 1.03f;
+                reflection = 0.0f; refraction = 0.8f; ambient = 0f; diffuse = 0.0f; environment = 1.03f;
             }
-            else if (cubeSpecularCB.Checked)
+            else if (bigCubeSpecularityRadioButton.Checked)
             {
-                refl = 0.8f; refr = 0f; amb = 0.05f; dif = 0.0f; env = 1f;
+                reflection = 0.8f; refraction = 0f; ambient = 0.05f; diffuse = 0.0f; environment = 1f;
             }
             else
             {
-                refl = 0.0f; refr = 0f; amb = 0.1f; dif = 0.8f; env = 1f;
+                reflection = 0.0f; refraction = 0f; ambient = 0.1f; diffuse = 0.8f; environment = 1f;
             }
-            cube2.figure_material = new Material(refl, refr, amb, dif, env);
+            bigCube.material = new Material(reflection, refraction, ambient, diffuse, environment);
 
             scene.Add(room);
-            scene.Add(cube1);
-            scene.Add(cube2);
-            scene.Add(s1);
+            scene.Add(sphere);
+            scene.Add(smallCube);
+            scene.Add(bigCube);
+            
         }
 
         public void Clear()
@@ -216,12 +215,12 @@ namespace Indiv2
             for (int i = 0; i < w; ++i)
                 for (int j = 0; j < h; ++j)
                 {
-                    Ray r = new Ray(focus, pixels[i, j]);
-                    r.start = new Vector3D(pixels[i, j].X, pixels[i, j].Y, pixels[i, j].Z);
-                    Vector3D clr = RayTrace(r, 10, 1);
-                    if (clr.X > 1.0f || clr.Y > 1.0f || clr.Z > 1.0f)
-                        clr.Normalize();
-                    color_pixels[i, j] = Color.FromArgb((int)(255 * clr.X), (int)(255 * clr.Y), (int)(255 * clr.Z));
+                    Ray ray = new Ray(focus, pixels[i, j]);
+                    ray.begin = new Vector3D(pixels[i, j].X, pixels[i, j].Y, pixels[i, j].Z);
+                    Vector3D color = RayTrace(ray, 10, 1);
+                    if (color.X > 1.0f || color.Y > 1.0f || color.Z > 1.0f)
+                        color.Normalize();
+                    color_pixels[i, j] = Color.FromArgb((int)(255 * color.X), (int)(255 * color.Y), (int)(255 * color.Z));
                 }
         }
 
@@ -251,20 +250,20 @@ namespace Indiv2
         }
 
         // видима ли точка пересечения луча с фигурой из источника света
-        public bool is_visible(Vector3D light_point, Vector3D hit_point)
+        public bool is_visible(Vector3D light_point, Vector3D collisionPoint)
         {
-            var dist = (light_point - hit_point);
+            var dist = (light_point - collisionPoint);
             float max_t = (float)Math.Sqrt(dist.X * dist.X + dist.Y * dist.Y + dist.Z * dist.Z); // позиция источника света на луче
-            Ray r = new Ray(hit_point, light_point);
+            Ray ray = new Ray(collisionPoint, light_point);
 
             foreach (Figure fig in scene)
-                if (fig.figure_intersection(r, out float t, out Vector3D n))
+                if (fig.intersection(ray, out float t, out Vector3D n))
                     if (t < max_t && t > RayTracing.EPS)
                         return false;
             return true;
         }
 
-        public Vector3D RayTrace(Ray r, int iter, float env)
+        public Vector3D RayTrace(Ray ray, int iter, float environment)
         {
             if (iter <= 0)
                 return new Vector3D(0, 0, 0);
@@ -277,43 +276,43 @@ namespace Indiv2
 
             foreach (Figure fig in scene)
             {
-                if (fig.figure_intersection(r, out float intersect, out Vector3D n))
-                    if (intersect < t || t == 0)     // нужна ближайшая фигура к точке наблюдения
+                if (fig.intersection(ray, out float interValue, out Vector3D n))
+                    if (interValue < t || t == 0)     // нужна ближайшая фигура к точке наблюдения
                     {
-                        t = intersect;
+                        t = interValue;
                         normal = n;
-                        m = new Material(fig.figure_material);
+                        m = new Material(fig.material);
                     }
             }
 
             if (t == 0)
                 return new Vector3D(0, 0, 0);
             //если угол между нормалью к поверхности объекта и направлением луча положительный, => угол острый, => луч выходит из объекта в среду
-            if (Vector3D.DotProduct(r.direction, normal) > 0)
+            if (Vector3D.DotProduct(ray.direction, normal) > 0)
             {
                 normal *= -1;
                 refract_out_of_figure = true;
             }
 
-            Vector3D hit_point = r.start + r.direction * t;
+            Vector3D collisionPoint = ray.begin + ray.direction * t;
 
             foreach (LightBox l in lights)
             {
-                Vector3D amb = l.color_light * m.ambient;
-                amb.X = (amb.X * m.clr.X);
-                amb.Y = (amb.Y * m.clr.Y);
-                amb.Z = (amb.Z * m.clr.Z);
-                res_color += amb;
+                Vector3D ambient = l.color * m.ambient;
+                ambient.X = (ambient.X * m.color.X);
+                ambient.Y = (ambient.Y * m.color.Y);
+                ambient.Z = (ambient.Z * m.color.Z);
+                res_color += ambient;
 
                 // диффузное освещение
-                if (is_visible(l.point_light, hit_point))
-                    res_color += l.shade(hit_point, normal, m.clr, m.diffuse);
+                if (is_visible(l.position, collisionPoint))
+                    res_color += l.localLighting(collisionPoint, normal, m.color, m.diffuse);
             }
 
             if (m.reflection > 0)
             {
-                Ray reflected_ray = r.reflect(hit_point, normal);
-                res_color += m.reflection * RayTrace(reflected_ray, iter - 1, env);
+                Ray reflected_ray = ray.reflect(collisionPoint, normal);
+                res_color += m.reflection * RayTrace(reflected_ray, iter - 1, environment);
             }
 
             if (m.refraction > 0)
@@ -324,7 +323,7 @@ namespace Indiv2
                 else
                     eta = 1 / m.environment;
 
-                Ray refracted_ray = r.refract(hit_point, normal, eta);
+                Ray refracted_ray = ray.refract(collisionPoint, normal, eta);
                 if (refracted_ray != null)
                     res_color += m.refraction * RayTrace(refracted_ray, iter - 1, m.environment);
             }

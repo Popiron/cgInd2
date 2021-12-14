@@ -7,40 +7,39 @@ using System.Windows.Media.Media3D;
 
 namespace Indiv2.models
 {
-    public class Side
+    public class Face
     {
-        public Figure host = null;
-        public List<int> points = new List<int>();
-        public Pen drawing_pen = new Pen(Color.Black);
+        public Figure owner = null;
+        public List<int> vertices = new List<int>();
+        public Pen pen = new Pen(Color.Black);
         public Vector3D Normal
         {
             get
             {
-                if (points.Count < 3)
+                if (vertices.Count < 3)
                     return new Vector3D(0, 0, 0);
                 Vector3D U = get_point(1) - get_point(0);
-                Vector3D V = get_point(points.Count - 1) - get_point(0);
+                Vector3D V = get_point(vertices.Count - 1) - get_point(0);
                 Vector3D normal = Vector3D.CrossProduct(U, V);
                 normal.Normalize();
                 return normal;
             }
         }
 
-        public Side(Figure h = null)
+        public Face(Figure h = null)
         {
-            host = h;
+            owner = h;
         }
-        public Side(Side s)
+        public Face(Face s)
         {
-            points = new List<int>(s.points);
-            host = s.host;
-            drawing_pen = s.drawing_pen.Clone() as Pen;
-            //Normal = new Vector3D(s.Normal.X,s.Normal.Y,s.Normal.Z);
+            vertices = new List<int>(s.vertices);
+            owner = s.owner;
+            pen = s.pen.Clone() as Pen;
         }
         public Vector3D get_point(int ind)
         {
-            if (host != null)
-                return host.points[points[ind]];
+            if (owner != null)
+                return owner.vertices[vertices[ind]];
             return new Vector3D();
         }
 

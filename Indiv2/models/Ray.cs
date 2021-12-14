@@ -7,46 +7,45 @@ namespace Indiv2.models
 {
     public class Ray
     {
-        public Vector3D start, direction;
+        public Vector3D begin, direction;
 
-        public Ray(Vector3D st, Vector3D end)
+        public Ray(Vector3D begin, Vector3D end)
         {
-            start = new Vector3D(st.X,st.Y,st.Z);
-            direction = end - st;
+            this.begin = new Vector3D(begin.X,begin.Y,begin.Z);
+            direction = end - begin;
             direction.Normalize();
         }
 
         public Ray() { }
 
-        public Ray(Ray r)
+        public Ray(Ray ray)
         {
-            start = r.start;
-            direction = r.direction;
+            begin = ray.begin;
+            direction = ray.direction;
         }
 
         // отражение
-        public Ray reflect(Vector3D hit_point, Vector3D normal)
+        public Ray reflect(Vector3D collisionPoint, Vector3D normal)
         {
-            Vector3D reflect_dir = direction - 2 * normal * Vector3D.DotProduct(direction, normal);
-            return new Ray(hit_point, hit_point + reflect_dir);
+            Vector3D reflectionDirection = direction - 2 * normal * Vector3D.DotProduct(direction, normal);
+            return new Ray(collisionPoint, collisionPoint + reflectionDirection);
         }
 
         // преломление
-        public Ray refract(Vector3D hit_point, Vector3D normal, float eta)
+        public Ray refract(Vector3D collisionPoint, Vector3D normal, float eta)
         {
-            Ray res_ray = new Ray();
-            float sclr = (float)Vector3D.DotProduct(normal, direction);
+            Ray ray = new Ray();
+            float scalar = (float)Vector3D.DotProduct(normal, direction);
 
-            float k = 1 - eta * eta * (1 - sclr * sclr);
+            float k = 1 - eta * eta * (1 - scalar * scalar);
 
             if (k >= 0)
             {
                 float cos_theta = (float)Math.Sqrt(k);
-                res_ray.start = new Vector3D(hit_point.X,hit_point.Y,hit_point.Z);
-                //res_ray.direction = Point3D.norm(eta * direction + (cos_theta * eta - (float)Math.Sqrt(k)) * normal);
-                res_ray.direction = eta * direction - (cos_theta + eta * sclr) * normal;
-                res_ray.direction.Normalize();
-                return res_ray;
+                ray.begin = new Vector3D(collisionPoint.X,collisionPoint.Y,collisionPoint.Z);
+                ray.direction = eta * direction - (cos_theta + eta * scalar) * normal;
+                ray.direction.Normalize();
+                return ray;
             }
             else
                 return null;

@@ -12,15 +12,15 @@ namespace Indiv2.models
         public float environment;   // коэффициент преломления среды
         public float ambient;       // коэффициент принятия фонового освещения
         public float diffuse;       // коэффициент принятия диффузного освещения
-        public Vector3D clr;         // цвет материала
+        public Vector3D color;         // цвет материала
 
-        public Material(float refl, float refr, float amb, float dif, float env = 1)
+        public Material(float reflection, float refraction, float ambient, float diffuse, float environment = 1)
         {
-            reflection = refl;
-            refraction = refr;
-            ambient = amb;
-            diffuse = dif;
-            environment = env;
+            this.reflection = reflection;
+            this.refraction = refraction;
+            this.ambient = ambient;
+            this.diffuse = diffuse;
+            this.environment = environment;
         }
 
         public Material(Material m)
@@ -30,7 +30,7 @@ namespace Indiv2.models
             environment = m.environment;
             ambient = m.ambient;
             diffuse = m.diffuse;
-            clr = new Vector3D(m.clr.X,m.clr.Y,m.clr.Z);
+            color = new Vector3D(m.color.X,m.color.Y,m.color.Z);
         }
 
         public Material() { }

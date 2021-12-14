@@ -8,12 +8,12 @@ namespace Indiv2.models.figures
 {
     class Room : Figure
     {
-        public Material front_wall_material;
-        public Material back_wall_material;
-        public Material left_wall_material;
-        public Material right_wall_material;
-        public Material up_wall_material;
-        public Material down_wall_material;
+        public Material front;
+        public Material back;
+        public Material left;
+        public Material right;
+        public Material ceiling;
+        public Material floor;
 
         public Room():base()
         {}
@@ -21,69 +21,68 @@ namespace Indiv2.models.figures
         public Room(Figure figure):base(figure)
         {}
         
-        // пересечение луча с фигурой
-        public override bool figure_intersection(Ray r, out float intersect, out Vector3D normal)
+        public override bool intersection(Ray ray, out float interValue, out Vector3D normal)
         {
-            intersect = 0;
+            interValue = 0;
             normal = new Vector3D();
-            Side sd = null;
-            int fm = -1;         // номер стены комнаты, которую пересек луч
+            Face face = null;
+            int wallId = -1;
 
-            for (int i = 0; i < sides.Count; ++i)
+            for (int i = 0; i < faces.Count; ++i)
             {
 
-                if (sides[i].points.Count == 3)
+                if (faces[i].vertices.Count == 3)
                 {
-                    if (RayTracing.ray_intersects_triangle(r, sides[i].get_point(0), sides[i].get_point(1), sides[i].get_point(2), out float t) && (intersect == 0 || t < intersect))
+                    if (RayTracing.ray_intersects_triangle(ray, faces[i].get_point(0), faces[i].get_point(1), faces[i].get_point(2), out float t) && (interValue == 0 || t < interValue))
                     {
-                        intersect = t;
-                        sd = sides[i];
+                        interValue = t;
+                        face = faces[i];
                     }
                 }
-                else if (sides[i].points.Count == 4)
+                else if (faces[i].vertices.Count == 4)
                 {
-                    if (RayTracing.ray_intersects_triangle(r, sides[i].get_point(0), sides[i].get_point(1), sides[i].get_point(3), out float t) && (intersect == 0 || t < intersect))
+                    if (RayTracing.ray_intersects_triangle(ray, faces[i].get_point(0), faces[i].get_point(1), faces[i].get_point(3), out float t) && (interValue == 0 || t < interValue))
                     {
-                        fm = i;
-                        intersect = t;
-                        sd = sides[i];
+                        wallId = i;
+                        interValue = t;
+                        face = faces[i];
                     }
-                    else if (RayTracing.ray_intersects_triangle(r, sides[i].get_point(1), sides[i].get_point(2), sides[i].get_point(3), out t) && (intersect == 0 || t < intersect))
+                    else if (RayTracing.ray_intersects_triangle(ray, faces[i].get_point(1), faces[i].get_point(2), faces[i].get_point(3), out t) && (interValue == 0 || t < interValue))
                     {
-                        fm = i;
-                        intersect = t;
-                        sd = sides[i];
+                        wallId = i;
+                        interValue = t;
+                        face = faces[i];
                     }
                 }
             }
 
-            if (intersect != 0)
+            if (interValue != 0)
             {
-                normal = sd.Normal;
-                    switch (fm)
+                normal = face.Normal;
+                    switch (wallId)
                     {
                         case 0:
-                            figure_material = new Material(back_wall_material);
+                            material = new Material(back);
                             break;
                         case 1:
-                            figure_material = new Material(front_wall_material);
+                            material = new Material(front);
                             break;
                         case 2:
-                            figure_material = new Material(right_wall_material);
+                            material = new Material(right);
                             break;
                         case 3:
-                            figure_material = new Material(left_wall_material);
+                            material = new Material(left);
                             break;
                         case 4:
-                            figure_material = new Material(up_wall_material);
+                            material = new Material(ceiling);
                             break;
                         case 5:
-                            figure_material = new Material(down_wall_material);
+                            material = new Material(floor);
                             break;
                         default:
                             break;
                     }
-                figure_material.clr = new Vector3D(sd.drawing_pen.Color.R / 255f, sd.drawing_pen.Color.G / 255f, sd.drawing_pen.Color.B / 255f);
+                material.color = new Vector3D(face.pen.Color.R / 255f, face.pen.Color.G / 255f, face.pen.Color.B / 255f);
                 return true;
             }
 

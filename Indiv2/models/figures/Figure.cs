@@ -10,25 +10,25 @@ namespace Indiv2.models.figures
 {
     public class Figure
     {
-        public List<Side> sides = new List<Side>();        // стороны
-        public Material figure_material;
-        public List<Vector3D> points = new List<Vector3D>();
+        public List<Face> faces = new List<Face>();
+        public Material material;
+        public List<Vector3D> vertices = new List<Vector3D>();
         
         
         public Vector3D Center {
             get
             {
                 Vector3D res = new Vector3D(0, 0, 0);
-                foreach (Vector3D p in points)
+                foreach (Vector3D point in vertices)
                 {
-                    res.X += p.X;
-                    res.Y += p.Y;
-                    res.Z += p.Z;
+                    res.X += point.X;
+                    res.Y += point.Y;
+                    res.Z += point.Z;
 
                 }
-                res.X /= points.Count();
-                res.Y /= points.Count();
-                res.Z /= points.Count();
+                res.X /= vertices.Count();
+                res.Y /= vertices.Count();
+                res.Z /= vertices.Count();
                 return res;
             }
         }
@@ -38,10 +38,10 @@ namespace Indiv2.models.figures
             get
             {
                 List<Matrix3D> matrices = new List<Matrix3D>();
-                for (int i = 0; i < points.Count; i++)
+                for (int i = 0; i < vertices.Count; i++)
                 {
                     var point = new Matrix3D(
-                        (float)points[i].X, (float)points[i].Y, (float)points[i].Z, 1,
+                        (float)vertices[i].X, (float)vertices[i].Y, (float)vertices[i].Z, 1,
                         1,1,1,1,
                         1,1,1,1,
                         1,1,1,1);
@@ -55,8 +55,8 @@ namespace Indiv2.models.figures
         public Pen Pen
         {
             set {
-                foreach (Side s in sides)
-                    s.drawing_pen = value;
+                foreach (Face s in faces)
+                    s.pen = value;
             }
         }
 
@@ -64,56 +64,56 @@ namespace Indiv2.models.figures
 
         public Figure(Figure f)
         {
-            foreach (var p in f.points)
-                points.Add(new Vector3D(p.X,p.Y,p.Z));
+            foreach (var point in f.vertices)
+                vertices.Add(new Vector3D(point.X,point.Y,point.Z));
 
-            foreach (Side s in f.sides)
+            foreach (Face s in f.faces)
             {
-                sides.Add(new Side(s));
-                sides.Last().host = this;
+                faces.Add(new Face(s));
+                faces.Last().owner = this;
             }
         }
 
         // пересечение луча с фигурой
-        public virtual bool figure_intersection(Ray r, out float intersect, out Vector3D normal)
+        public virtual bool intersection(Ray ray, out float interValue, out Vector3D normal)
         {
-            intersect = 0;
+            interValue = 0;
             normal = new Vector3D();
-            Side sd = null;
-            int fm = -1;         // номер стены комнаты, которую пересек луч
+            Face face = null;
+            int wallId = -1;
 
-            for (int i = 0; i <  sides.Count; ++i)
+            for (int i = 0; i <  faces.Count; ++i)
             {
 
-                if ( sides[i].points.Count == 3)
+                if ( faces[i].vertices.Count == 3)
                 {
-                    if (RayTracing.ray_intersects_triangle(r,  sides[i].get_point(0),  sides[i].get_point(1),  sides[i].get_point(2), out float t) && (intersect == 0 || t < intersect))
+                    if (RayTracing.ray_intersects_triangle(ray,  faces[i].get_point(0),  faces[i].get_point(1),  faces[i].get_point(2), out float t) && (interValue == 0 || t < interValue))
                     {
-                        intersect = t;
-                        sd =  sides[i];
+                        interValue = t;
+                        face =  faces[i];
                     }
                 }
-                else if ( sides[i].points.Count == 4)
+                else if ( faces[i].vertices.Count == 4)
                 {
-                    if (RayTracing.ray_intersects_triangle(r,  sides[i].get_point(0),  sides[i].get_point(1),  sides[i].get_point(3), out float t) && (intersect == 0 || t < intersect))
+                    if (RayTracing.ray_intersects_triangle(ray,  faces[i].get_point(0),  faces[i].get_point(1),  faces[i].get_point(3), out float t) && (interValue == 0 || t < interValue))
                     {
-                        fm = i;
-                        intersect = t;
-                        sd =  sides[i];
+                        wallId = i;
+                        interValue = t;
+                        face =  faces[i];
                     }
-                    else if (RayTracing.ray_intersects_triangle(r,  sides[i].get_point(1),  sides[i].get_point(2),  sides[i].get_point(3), out t) && (intersect == 0 || t < intersect))
+                    else if (RayTracing.ray_intersects_triangle(ray,  faces[i].get_point(1),  faces[i].get_point(2),  faces[i].get_point(3), out t) && (interValue == 0 || t < interValue))
                     {
-                        fm = i;
-                        intersect = t;
-                        sd =  sides[i];
+                        wallId = i;
+                        interValue = t;
+                        face =  faces[i];
                     }
                 }
             }
 
-            if (intersect != 0)
+            if (interValue != 0)
             {
-                normal = sd.Normal;
-                figure_material.clr = new Vector3D(sd.drawing_pen.Color.R / 255f, sd.drawing_pen.Color.G / 255f, sd.drawing_pen.Color.B / 255f);
+                normal = face.Normal;
+                material.color = new Vector3D(face.pen.Color.R / 255f, face.pen.Color.G / 255f, face.pen.Color.B / 255f);
                 return true;
             }
 
